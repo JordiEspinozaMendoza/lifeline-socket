@@ -2,7 +2,7 @@ import { isEmpty } from "./nativeMethods";
 const { getCache, setCache, getKeys, delCache } = require("./redis");
 
 async function createRoom(data) {
-  await setCache(data.room, {
+  await setCache(`room-${data.room}`, {
     room: data.room,
     ambulance: data.ambulance,
     patient: data.patient,
@@ -14,20 +14,20 @@ async function createRoom(data) {
   });
 }
 async function getRoom(room) {
-  const data = await getCache(room);
+  const data = await getCache(`room-${room}`);
   return data;
 }
 async function getRooms() {
-  const rooms = await getKeys();
+  const rooms = await getKeys("room-*");
   return rooms;
 }
 async function updateRoomStatus(room, status) {
-  const data = await getCache(room);
+  const data = await getCache(`room-${room}`);
   if (!isEmpty(data)) {
     data.status = status;
-    await setCache(room, data);
+    await setCache(`room-${room}`, data);
   }
-  return await getCache(room);
+  return await getCache(`room-${room}`);
 }
 module.exports = {
   createRoom,
