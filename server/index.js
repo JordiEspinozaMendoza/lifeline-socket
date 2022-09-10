@@ -2,7 +2,7 @@ import express from "express";
 import http from "http";
 import cors from "cors";
 import { REDIS, FRONT_URL } from "../config/config";
-import { createClient } from 'redis';
+import { createClient } from "redis";
 
 /* AUTHENTICATION SERVER NODE */
 const app = express();
@@ -32,10 +32,16 @@ app.use(
 );
 io.on("connection", (socket) => {
   // connection
-  console.log("New client connected");
+  console.log("New client connected to life server");
   // disconnect
   socket.on("disconnect", () => {
     console.log("Client disconnected");
+  });
+  socket.on("request__ambulance", (data) => {
+    console.log(data);
+    // emparejar con el socket de la ambulancia
+    // etc
+    socket.emit("success__ambulance", data);
   });
 });
 export default server;
