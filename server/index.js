@@ -45,14 +45,18 @@ io.on("connection", (socket) => {
     console.log("Client disconnected");
   });
   socket.on("user__joined", async (data) => {
-    await joinUser({
-      id: data?.id,
-      username: data?.username,
-      socketId: socket.id,
-      location: data?.location,
-    }).then((user) => {
-      socket.emit("success__user__joined", user);
-    });
+    if (data) {
+      await joinUser({
+        id: data?.id,
+        username: data?.username,
+        socketId: socket.id,
+        location: data?.location,
+      }).then((user) => {
+        socket.emit("success__user__joined", user);
+      });
+    } else {
+      socket.emit("error__user__joined", "Error");
+    }
   });
   socket.on("change__user__location", async (data) => {
     await updateUserLocation(socket.id, data?.location).then((user) => {
