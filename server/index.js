@@ -23,10 +23,12 @@ export const io = require("socket.io")(server, {
   cors: {
     origin: "*",
     methods: ["GET", "POST"],
+    credentials: false,
   },
   "force new connection": true,
   reconnectionAttempts: "Infinity",
   timeout: 10000,
+  transports: ["websocket"],
 });
 
 app.use(cors());
