@@ -67,17 +67,21 @@ io.on("connection", (socket) => {
   // patient request ambulance
   socket.on("request__ambulance", async (data) => {
     // fetch ambulance from redis
-    await getCloserAmbulance({
-      userLocation: data?.location,
-    }).then((ambulance) => {
-      // if ambulance is available
-      if (ambulance) {
-        socket.emit("success__request__ambulance", ambulance);
-      } else {
-        // if ambulance is not available
-        socket.emit("error__request__ambulance", "No ambulances available");
-      }
-    });
+    if (data?.location) {
+      await getCloserAmbulance({
+        userLocation: data?.location,
+      }).then((ambulance) => {
+        // if ambulance is available
+        if (ambulance) {
+          socket.emit("success__request__ambulance", ambulance);
+        } else {
+          // if ambulance is not available
+          socket.emit("error__request__ambulance", "No ambulances available");
+        }
+      });
+    } else {
+      socket.emit("error__request__ambulance", "Location not provided");
+    }
   });
   socket.on("ambulance__joined", async (data) => {
     await createAmbulance({
