@@ -1,0 +1,32 @@
+{
+  "name": "lifeline-socket",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon --signal SIGHUP --exec babel-node index.js",
+    "start": "babel-node -- index.js",
+    "eslint": "eslint ."
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "redis": "^4.2.0",
+    "socket.io": "^4.5.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.18.10",
+    "@babel/node": "^7.18.10",
+    "@babel/preset-env": "^7.19.0",
+    "babel-jest": "^28.1.3",
+    "eslint": "^8.21.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.19",
+    "prettier": "^2.7.1"
+  }
+}
