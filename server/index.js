@@ -22,7 +22,7 @@ import { createRoom, getRooms, deleteRoom } from "./utils/rooms";
 const app = express();
 const server = http.createServer(app);
 /* AUTHENTICATION REDIS */
-const url = "redis://" + REDIS.HOST + ":" + REDIS.PORT;
+const url = REDIS.URL;
 export const client = createClient({ url: url });
 client.on("connect", () => console.log("Connected to Redis!"));
 client.on("error", (err) => console.log("Redis Client Error", err));
@@ -35,7 +35,6 @@ export const io = require("socket.io")(server, {
     transports: ["websocket", "polling"],
   },
   "force new connection": true,
-  reconnectionAttempts: "Infinity",
   timeout: 10000,
   allowEIO3: true,
 });
