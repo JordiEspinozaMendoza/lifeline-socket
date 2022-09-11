@@ -11,18 +11,40 @@ async function getUser(id) {
 }
 async function getUsers() {
   const users = await getKeys("user-*");
-  return users;
+  const usersData = [];
+  if (users) {
+    for (let i = 0; i < users.length; i++) {
+      const user = await getCache(users[i]);
+      usersData.push(user);
+    }
+  }
+  return usersData;
 }
 async function deleteUser(id) {
   await delCache(`user-${id}`);
 }
 async function updateUserLocation(id, location) {
   const user = await getCache(`user-${id}`);
+  let room = "";
   if (!isEmpty(user)) {
     user.location = location;
     await setCache(`user-${id}`, user);
+    // found room where user is patient
+    const rooms = await getKeys("room-*");
+    if (rooms) {
+      for (let i = 0; i < rooms.length; i++) {
+        const room = await getCache(rooms[i]);
+        if (room.patient.socketId === id) {
+          room.location.patient = location;
+          await setCache(`room-${room.room}`, room);
+        }
+        room = room.room;
+      }
+    }
   }
-  return await getCache(`user-${id}`);
+  return {
+    room,
+  };
 }
 module.exports = {
   joinUser,
