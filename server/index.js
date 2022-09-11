@@ -34,6 +34,7 @@ export const io = require("socket.io")(server, {
     methods: ["GET", "POST"],
     transports: ["websocket", "polling"],
   },
+  
   "force new connection": true,
   reconnectionAttempts: "Infinity",
   timeout: 10000,
