@@ -31,10 +31,9 @@ client.connect();
 export const io = require("socket.io")(server, {
   cors: {
     origin: "*",
-    methods: ["GET", "POST"],
+    methods: ["GET", "POST", "PUT", "DELETE"],
     transports: ["websocket", "polling"],
   },
-  
   "force new connection": true,
   reconnectionAttempts: "Infinity",
   timeout: 10000,
