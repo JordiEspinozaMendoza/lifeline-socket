@@ -6,12 +6,13 @@ async function createRoom(data) {
     room: data.room,
     ambulance: data.ambulance,
     patient: data.patient,
-    status: "waiting",
+    status: "On the way",
     location: {
       patient: data.location.patient,
       ambulance: data.location.ambulance,
     },
   });
+  return await getCache(`room-${data.room}`);
 }
 async function getRoom(room) {
   const data = await getCache(`room-${room}`);
@@ -19,7 +20,14 @@ async function getRoom(room) {
 }
 async function getRooms() {
   const rooms = await getKeys("room-*");
-  return rooms;
+  const roomsData = [];
+  if (rooms) {
+    for (let i = 0; i < rooms.length; i++) {
+      const room = await getCache(rooms[i]);
+      roomsData.push(room);
+    }
+  }
+  return roomsData;
 }
 async function updateRoomStatus(room, status) {
   const data = await getCache(`room-${room}`);
@@ -29,9 +37,14 @@ async function updateRoomStatus(room, status) {
   }
   return await getCache(`room-${room}`);
 }
+async function deleteRoom(room) {
+  await delCache(`room-${room}`);
+}
+
 module.exports = {
   createRoom,
   getRoom,
   getRooms,
   updateRoomStatus,
+  deleteRoom,
 };
